@@ -118,5 +118,33 @@ function createProductElement(product) {
 <strong>$${product.price.toLocaleString()}</strong>
   `;
 
+  productEl.querySelector(".status").addEventListener("click", addToCart);
+
   return productEl;
+}
+
+// カートへの追加と削除を切り替える
+function addToCart(e) {
+  const statusEl = e.target;
+
+  if (statusEl.classList.contains("added")) {
+    // カートから削除
+    statusEl.classList.remove("added");
+    statusEl.innerText = "Add To Car";
+    statusEl.classList.remove("bg-red-600");
+    statusEl.classList.add("bg-gray-800");
+
+    cartItemCount--;
+  } else {
+    // カートに追加
+    statusEl.classList.add("added");
+    statusEl.innerText = "Remove From Car";
+    statusEl.classList.remove("bg-gray-800");
+    statusEl.classList.add("bg-red-600");
+
+    cartItemCount++;
+  }
+
+  // カートアイテム数を更新
+  cartCount.innerText = cartItemCount.toString();
 }

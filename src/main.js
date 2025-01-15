@@ -72,3 +72,51 @@ const products = [
     price: 999.99,
   },
 ];
+
+// DOM要素を取得
+const productsWrapperEl = document.getElementById("products-wrapper");
+const checkEl = document.querySelectorAll(".check");
+const filtersContainerEl = document.getElementById("filters-container");
+const searchInput = document.getElementById("search");
+const cartButton = document.getElementById("cartButton");
+const cartCount = document.getElementById("cartCount");
+
+// 初期のカートアイテム数
+let cartItemCount = 0;
+
+// 初期のプロダクト数
+const productsEls = [];
+
+// プロダクトとプロダクト要素を作成
+products.forEach((product) => {
+  const productEl = createProductElement(product);
+  productsEls.push(productEl);
+  productsWrapperEl.appendChild(productEl);
+});
+
+// プロダクト要素を作成
+function createProductElement(product) {
+  const productEl = document.createElement("div");
+
+  productEl.className = "item space-y-2";
+
+  productEl.innerHTML = `
+  <div
+  class="bg-gray-100 flex justify-cener relative overflow-hidden group cursol-pointer border"
+>
+  <img
+    src="${product.url}"
+    alt="${product.name}"
+    class="w-full h-full object-cover"
+  />
+  <span
+    class="status bg-black text-white absolute bottom-0 left-0 right-0 text-center py-2 translate-y-full transition group-hover:translate-y-0"
+    >Add To Cart</span
+  >
+</div>
+<p class="text-xl">${product.name}</p>
+<strong>$${product.price.toLocaleString()}</strong>
+  `;
+
+  return productEl;
+}

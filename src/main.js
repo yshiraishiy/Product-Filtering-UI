@@ -75,7 +75,7 @@ const products = [
 
 // DOM要素を取得
 const productsWrapperEl = document.getElementById("products-wrapper");
-const checkEl = document.querySelectorAll(".check");
+const checkEls = document.querySelectorAll(".check");
 const filtersContainerEl = document.getElementById("filters-container");
 const searchInput = document.getElementById("search");
 const cartButton = document.getElementById("cartButton");
@@ -93,6 +93,10 @@ products.forEach((product) => {
   productsEls.push(productEl);
   productsWrapperEl.appendChild(productEl);
 });
+
+// フィルターイベントリスナーを追加
+filtersContainerEl.addEventListener("change", filterProducts);
+searchInput.addEventListener("input", filterProducts);
 
 // プロダクト要素を作成
 function createProductElement(product) {
@@ -147,4 +151,37 @@ function addToCart(e) {
 
   // カートアイテム数を更新
   cartCount.innerText = cartItemCount.toString();
+}
+
+// 検索またはチェックボックスでフィルタリング
+function filterProducts() {
+  // 検索された文字を取得
+  const searchTerm = searchInput.value.trim().toLocaleString();
+  // チェックされたカテゴリーを取得
+  const checkedCategories = Array.from(checkEls)
+    .filter((check) => {
+      return check.checked;
+    })
+    .map((check) => {
+      return check.id;
+    });
+
+  productsEls.forEach((productEl, index) => {
+    const product = products[index];
+
+    // 検索またはチェックしたプロダクトが一致していれば表示
+    const matchesSearchTerm = product.name.toLowerCase().includes(searchTerm);
+    const isInCheckedCategory =
+      checkedCategories.length === 0 ||
+      checkedCategories.includes(product.type);
+
+    // 一致したものは表示、一致しなかったものは非表示
+    if (matchesSearchTerm && isInCheckedCategory) {
+      productEl.classList.remove("hidden");
+    } else {
+      productEl.classList.add("hidden");
+    }
+  });
+
+  console.log(checkedCategories);
 }
